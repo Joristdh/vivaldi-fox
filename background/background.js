@@ -4,14 +4,18 @@ let currentTheme;
 
 let whiteFaviconCache = new Map();
 
-async function setColor({id, windowId}, tabColorMap) {
-  let color = tabColorMap.get(id);
+async function setColor({ id, windowId }, tabColorMap) {
+  let color
+  try {
+    color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[name="theme-color"]')?.content` }))[0]
+  } catch { }
   let win = await browser.windows.get(windowId);
   let pageColorsOnInactive = await Settings.getPageColorsOnInactive();
-  if (!color || (!pageColorsOnInactive && !win.focused)) {
+
+  if (!color || color == "#ffffff" || (!pageColorsOnInactive && !win.focused)) {
     currentTheme.reset(windowId);
   } else {
-    currentTheme.patch(color.toString(), color.textColor.toString(), windowId);
+    currentTheme.patch(color.toString(), "rgb(255,255,255)", windowId);
   }
 }
 
@@ -22,10 +26,10 @@ async function isDayMode() {
 
   if (nightModeStart > nightModeEnd) {
     return date.getHours() >= nightModeEnd &&
-           date.getHours() < nightModeStart;
+      date.getHours() < nightModeStart;
   } else {
     return date.getHours() < nightModeStart ||
-           date.getHours() >= nightModeEnd;
+      date.getHours() >= nightModeEnd;
   }
 }
 
@@ -76,16 +80,14 @@ new AddonState({
     }
   },
   async onWindowFocusChange(focusedWindowId) {
-    if (await Settings.getPageColorsOnInactive()) {
-      return;
-    }
-
     let tabs = await browser.tabs.query({ active: true });
     if (tabs.length == 0) {
       return;
     }
     for (let tab of tabs) {
-      setColor(tab, this.state.tabColorMap);
+      if (tab.windowId == focusedWindowId) {
+        setColor(tab, this.state.tabColorMap);
+      }
     }
   },
   async onFaviconChange(tab) {
