@@ -21,64 +21,15 @@ async function init() {
       settings: {
         themes: processThemes(await Settings.getThemes()),
         defaultTheme: await Settings.getDefaultTheme(),
-        nightTheme: await Settings.getNightTheme(),
-        nightModeStart: await Settings.getNightModeStart(),
-        nightModeEnd: await Settings.getNightModeEnd(),
         pageColorsOnInactive: await Settings.getPageColorsOnInactive(),
-        whiteBackgroundFavicons: await Settings.getWhiteBackgroundFavicons(),
-        colorSource: await Settings.getColorSource(),
         usePageDefinedColors: await Settings.getUsePageDefinedColors(),
       },
       selectedTab: await Settings.getDefaultTheme(),
     },
     actions: {
-      addTheme() {
-        let {themes} = this.state.settings;
-        let name;
-        do {
-          name = prompt("Name of theme").trim();
-        } while (themes.hasOwnProperty(name) && name);
-        // User has canceled
-        if (!name) {
-          return;
-        }
-
-        this.state.selectedTab = name;
-        this.state.settings.themes[name] = DEFAULT_THEMES.light;
-        this.state.settings.themes[name].name = name;
-        Settings.setThemes(themes);
-      },
-      deleteTheme(name) {
-        let {themes, defaultTheme, nightTheme} = this.state.settings;
-        if (Object.keys(themes).length === 1) {
-          return;
-        }
-        delete themes[name];
-        this.state.selectedTab = Object.keys(themes)[0];
-
-        if (defaultTheme === name) {
-          this.actions.setDefaultTheme(Object.keys(themes)[0]);
-        }
-        if (nightTheme === name) {
-          this.actions.setNightTheme(Object.keys(themes)[0]);
-        }
-        Settings.setThemes(themes);
-      },
       setDefaultTheme(name) {
         this.state.settings.defaultTheme = name;
         Settings.setDefaultTheme(name);
-      },
-      setNightTheme(name) {
-        this.state.settings.nightTheme = name;
-        Settings.setNightTheme(name);
-      },
-      setNightModeStart(time) {
-        this.state.settings.nightModeStart = time;
-        Settings.setNightModeStart(time);
-      },
-      setNightModeEnd(time) {
-        this.state.settings.nightModeEnd = time;
-        Settings.setNightModeEnd(time);
       },
       setThemeProperty(theme, type, property, value) {
         let {themes} = this.state.settings;
@@ -128,39 +79,6 @@ async function init() {
       setPageColorsOnInactive(value) {
         this.state.settings.pageColorsOnInactive = value;
         Settings.setPageColorsOnInactive(value);
-      },
-      setWhiteBackgroundFavicons(target) {
-        let value = target.checked;
-        browser.permissions.request(ALL_URLS).then((granted) => {
-          if (granted) {
-            this.state.settings.whiteBackgroundFavicons = value;
-            target.checked = value;
-            Settings.setWhiteBackgroundFavicons(value);
-          } else {
-            // Couldn't get permission, need to revert value
-            target.checked = this.state.settings.whiteBackgroundFavicons;
-          }
-        });
-      },
-      setColorSource(target) {
-        let value = target.value;
-
-        if (value == "page-top" || value == "page-top-accent") {
-          browser.permissions.request(ALL_URLS).then((granted) => {
-            if (granted) {
-              this.state.settings.colorSource = value;
-              target.value = value;
-              Settings.setColorSource(value);
-            } else {
-              // Couldn't get permission, need to revert value
-              target.value = this.state.settings.colorSource;
-            }
-          });
-        } else {
-          this.state.settings.colorSource = value;
-          Settings.setColorSource(value);
-          target.value = value;
-        }
       },
       setUsePageDefinedColors(target) {
         let value = target.checked;

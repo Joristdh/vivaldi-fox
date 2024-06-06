@@ -20,12 +20,6 @@ function Tabs({ tabs, selectedTab }) {
           }
         }, createElement("span", {}, t.label))
       )),
-      createElement("button", {
-        className: "addButton",
-        onClick() {
-          app.actions.addTheme();
-        }
-      })
     ),
     createElement("div", { className: "tab-panel" },
       selected.component

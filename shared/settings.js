@@ -47,26 +47,11 @@ const Settings = {
   getDefaultTheme() {
     return getSetting("defaultTheme", "light");
   },
-  getNightTheme() {
-    return getSetting("nightTheme", "light");
-  },
-  getNightModeStart() {
-    return getSetting("nightModeStart", 20);
-  },
-  getNightModeEnd() {
-    return getSetting("nightModeEnd", 8);
-  },
   getPageColorsOnInactive() {
     return getSetting("pageColorsOnInactive", true);
   },
-  getWhiteBackgroundFavicons() {
-    return getSetting("whiteBackgroundFavicons", false);
-  },
   getUsePageDefinedColors() {
     return getSetting("useMetaTag", false);
-  },
-  getColorSource() {
-    return getSetting("colorSource", "favicon");
   },
   getThemes() {
     return getSetting("themes", DEFAULT_THEMES);
@@ -80,23 +65,8 @@ const Settings = {
   setDefaultTheme(theme) {
     setSetting("defaultTheme", theme);
   },
-  setNightTheme(theme) {
-    setSetting("nightTheme", theme);
-  },
-  setNightModeStart(time) {
-    setSetting("nightModeStart", time);
-  },
-  setNightModeEnd(time) {
-    setSetting("nightModeEnd", time);
-  },
   setPageColorsOnInactive(value) {
     setSetting("pageColorsOnInactive", value);
-  },
-  setWhiteBackgroundFavicons(value) {
-    setSetting("whiteBackgroundFavicons", value);
-  },
-  setColorSource(value) {
-    setSetting("colorSource", value);
   },
   setUsePageDefinedColors(value) {
     setSetting("useMetaTag", value);
