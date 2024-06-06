@@ -18,7 +18,6 @@
       "background/constants.js",
       "background/color.js",
       "background/addon-state.js",
-      "background/favicon-utils.js",
       "background/color-utils.js",
       "background/theme.js",
       "background/background.js"
