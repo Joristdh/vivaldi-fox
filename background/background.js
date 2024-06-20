@@ -6,7 +6,8 @@ async function setColor({ windowId }) {
   let color
   try {
     if (!(color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[media="(prefers-color-scheme: dark)"]')?.content` }))[0]))
-      color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[name="theme-color"]')?.content` }))[0]
+      if (!(color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[name="theme-color"]')?.content` }))[0]))
+        color = (await browser.tabs.executeScript({ code: `getComputedStyle(document.body).getPropertyValue('--theme-color')` }))[0]
   } catch { }
   let win = await browser.windows.get(windowId);
   let pageColorsOnInactive = await Settings.getPageColorsOnInactive();
