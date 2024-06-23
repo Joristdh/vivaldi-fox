@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "VivaldiFox",
   "author": "Jydis",
-  "version": "3.7",
+  "version": "3.13",
   "icons": {
     "16": "icon.svg",
     "32": "icon.svg",
@@ -15,10 +15,8 @@
   "background": {
     "scripts": [
       "shared/settings.js",
-      "background/constants.js",
       "background/color.js",
       "background/addon-state.js",
-      "background/color-utils.js",
       "background/theme.js",
       "background/background.js"
     ]

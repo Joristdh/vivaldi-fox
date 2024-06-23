@@ -36,3 +36,6 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
+.amo-upload-uuid
+.vscode/tasks.json
+.amo-upload-uuid

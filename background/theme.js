@@ -39,7 +39,7 @@ function fixAliases(theme) {
 class Theme {
   /**
    * Build a theme with properties from the manifest
-   * @param Object properties
+   * @param Object propertie
    */
   constructor(theme) {
     this.theme = theme;
@@ -59,7 +59,7 @@ class Theme {
   /**
    * Patch specific properties of the theme
    */
-  patch(background, text, windowId) {
+  patch(background, text, windowId, accent = undefined) {
     if (this.theme.applyPageColors.length === 0) {
       return Promise.resolve();
     }
@@ -68,6 +68,8 @@ class Theme {
         [x]: textProperties.includes(x) ? text : background,
       }, acc);
     }, {});
+
+    newColors.accentcolor = accent || background;
 
     let { properties, opacities } = this.theme;
 

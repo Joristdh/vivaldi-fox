@@ -3,20 +3,21 @@
 let currentTheme;
 
 async function setColor({ windowId }) {
-  let color
+  let color, accent
   try {
-    if (!(color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[media="(prefers-color-scheme: dark)"]')?.content` }))[0]))
-      if (!(color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[name="theme-color"]')?.content` }))[0]))
-        color = (await browser.tabs.executeScript({ code: `getComputedStyle(document.body).getPropertyValue('--theme-color')` }))[0]
+    if ((color = (await browser.tabs.executeScript({ code: `getComputedStyle(document.body).getPropertyValue('--theme-color')` }))[0]))
+      accent = (await browser.tabs.executeScript({ code: `getComputedStyle(document.body).getPropertyValue('--theme-accent')` }))[0]
+    else if (!(color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[media="(prefers-color-scheme: dark)"]')?.content` }))[0]))
+      color = (await browser.tabs.executeScript({ code: `document.querySelector('meta[name="theme-color"]')?.content` }))[0]
   } catch { }
   let win = await browser.windows.get(windowId);
   let pageColorsOnInactive = await Settings.getPageColorsOnInactive();
 
 
-  if (!color || color.match(/#f.f.f./i) || (!pageColorsOnInactive && !win.focused)) {
+  if (!color || color.match(/#f.f.f./i) || color.match(/rgba?\(2\d\d, *2\d\d, *2\d\d(, *\d*\.\d+)?\)/i) || (!pageColorsOnInactive && !win.focused)) {
     currentTheme.reset(windowId);
   } else {
-    currentTheme.patch(color.toString(), "", windowId);
+    currentTheme.patch(color, "#fff", windowId, accent);
   }
 }
 
